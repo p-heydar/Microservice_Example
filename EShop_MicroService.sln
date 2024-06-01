@@ -5,7 +5,7 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Src", "Src", "{6CAF41F5-DBAA-4376-BD95-921B6145A878}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catalog.API", "Src\Services\Catalog\Catalog.API\Catalog.API.csproj", "{0A15EB84-94FB-4F44-A4A4-C919F23D8A85}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Catalog.API", "Src\Services\Catalog\Catalog.API\Catalog.API.csproj", "{0A15EB84-94FB-4F44-A4A4-C919F23D8A85}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{1FACE535-8555-43C6-BFC3-21A93295440B}"
 EndProject
@@ -13,7 +13,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catalog", "Catalog", "{DA37
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BuildingBlocks", "BuildingBlocks", "{4DA0C0E7-52F6-4A97-9216-17CA2B7E3839}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildingBlocks", "BuildingBlocks\BuildingBlocks\BuildingBlocks.csproj", "{0E6DFA53-2B36-440A-B2EC-6F1D451245FA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuildingBlocks", "BuildingBlocks\BuildingBlocks\BuildingBlocks.csproj", "{0E6DFA53-2B36-440A-B2EC-6F1D451245FA}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{D6721200-68FD-4799-98C4-606278E7E911}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,6 +31,10 @@ Global
 		{0E6DFA53-2B36-440A-B2EC-6F1D451245FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0E6DFA53-2B36-440A-B2EC-6F1D451245FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0E6DFA53-2B36-440A-B2EC-6F1D451245FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6721200-68FD-4799-98C4-606278E7E911}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6721200-68FD-4799-98C4-606278E7E911}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6721200-68FD-4799-98C4-606278E7E911}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6721200-68FD-4799-98C4-606278E7E911}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
