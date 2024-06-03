@@ -1,10 +1,12 @@
 ﻿
+using Microsoft.AspNetCore.Mvc;
+
 namespace Catalog.API.Products.CreateProduct;
 
-public sealed record CreateProductRequest(string name, List<string> categories,
-        string description, string imageFile, decimal price);
+public sealed record CreateProductRequest(string Name, List<string> Categories,
+        string Description, string ImageFile, decimal Price);
 
-public sealed record CreateProductResponse(Guid id);
+public sealed record CreateProductResponse(Guid Id);
 
 public class CreateProductEndpoint : ICarterModule
 {
@@ -19,7 +21,7 @@ public class CreateProductEndpoint : ICarterModule
             var result = await sender.Send(command);
             var response = result.Adapt<CreateProductResponse>();
 
-            return Results.Created($"/Products/{response.id}", response);
+            return Results.Created($"/Products/{response.Id}", response);
         })
         .WithName("CreateProduct")
         .Produces<CreateProductResponse>(statusCode: StatusCodes.Status201Created)
