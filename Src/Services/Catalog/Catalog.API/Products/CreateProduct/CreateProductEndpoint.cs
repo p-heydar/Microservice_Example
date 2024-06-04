@@ -8,13 +8,12 @@ public sealed record CreateProductRequest(string Name, List<string> Categories,
 
 public sealed record CreateProductResponse(Guid Id);
 
-public class CreateProductEndpoint : ICarterModule
+internal class CreateProductEndpoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
         app.MapPost("/Products",
-            async (CreateProductRequest request, ISender sender)
-            =>
+            async (CreateProductRequest request, ISender sender) =>
         {
             var command = request.Adapt<CreateProductCommand>();
 
