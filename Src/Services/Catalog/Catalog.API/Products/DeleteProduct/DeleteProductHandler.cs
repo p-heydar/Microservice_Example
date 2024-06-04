@@ -31,7 +31,7 @@ public class DeleteProductHandler(IDocumentSession session) : ICommandHandler<De
 
         catch (Exception ex)
         {
-            return new DeleteProductResult(false);
+            throw new Exception(ex.Message);
         }
 
         finally

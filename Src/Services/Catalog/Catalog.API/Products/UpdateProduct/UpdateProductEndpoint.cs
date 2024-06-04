@@ -9,7 +9,7 @@ public sealed record UpdateProductRequest(Product Product);
 
 public sealed record UpdateProductResponse(bool IsSuccess);
 
-internal sealed class UpdateProductEndpoint : ICarterModule
+public sealed class UpdateProductEndpoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {

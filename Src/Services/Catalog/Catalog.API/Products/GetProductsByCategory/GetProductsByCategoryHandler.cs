@@ -12,7 +12,7 @@ namespace Catalog.API.Products.GetProductsByCategory;
 
 public sealed record GetProductsByCategoryQuery(string Category) : IQuery<GetProductsByCategoryResult>;
 
-public sealed record GetProductsByCategoryResult(IImmutableList<Product> Products);
+public sealed record GetProductsByCategoryResult(IEnumerable<Product> Products);
 
 
 internal sealed class GetProductsByCategoryHandler(IDocumentSession session) : IQueryHandler<GetProductsByCategoryQuery,
@@ -26,7 +26,7 @@ internal sealed class GetProductsByCategoryHandler(IDocumentSession session) : I
                 .ToImmutableList()
                     ?? throw new ProductNotFoundException();
 
-        var result = findProductsByCategory.Adapt<GetProductsByCategoryResult>();
+        var result = new GetProductsByCategoryResult(findProductsByCategory);
 
         return result;
     }

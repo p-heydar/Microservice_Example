@@ -12,8 +12,11 @@
 
   <ItemGroup>
     <PackageReference Include="Marten" Version="7.18.0" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.6" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0-Preview.1" />
 	  <PackageReference Include="Carter" Version="8.2.0" />
+	  <PackageReference Include="Swashbuckle.Aspnetcore" Version="6.6.2" />
+	  <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.6.2" />
   </ItemGroup>
 
   <ItemGroup>

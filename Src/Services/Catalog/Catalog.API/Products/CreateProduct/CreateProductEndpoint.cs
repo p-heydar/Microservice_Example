@@ -8,7 +8,7 @@ public sealed record CreateProductRequest(string Name, List<string> Categories,
 
 public sealed record CreateProductResponse(Guid Id);
 
-internal class CreateProductEndpoint : ICarterModule
+public class CreateProductEndpoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
@@ -26,6 +26,7 @@ internal class CreateProductEndpoint : ICarterModule
         .Produces<CreateProductResponse>(statusCode: StatusCodes.Status201Created)
         .ProducesProblem(statusCode: StatusCodes.Status400BadRequest)
         .WithSummary("Create Product")
-        .WithDescription("Create Product");
+        .WithDescription("Create Product")
+        .WithOpenApi();
     }
 }

@@ -6,7 +6,7 @@ namespace Catalog.API.Products.DeleteProduct;
 
 public sealed record DeleteProductResponse(bool IsSuccess);
 
-internal sealed class DeleteProductEndpoint(IDocumentSession session) : ICarterModule
+public sealed class DeleteProductEndpoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {

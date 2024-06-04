@@ -4,9 +4,9 @@ using Catalog.API.Models.Catalogs;
 
 namespace Catalog.API.Products.GetAllProducts;
 
-public sealed record GetAllProductsResponse(IImmutableList<Product> Products);
+public sealed record GetAllProductsResponse(IEnumerable<Product> Products);
 
-internal sealed class GetAllProductEndpoint : ICarterModule
+public sealed class GetAllProductEndpoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {

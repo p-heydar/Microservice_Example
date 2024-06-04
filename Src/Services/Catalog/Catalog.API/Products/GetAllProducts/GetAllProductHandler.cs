@@ -7,7 +7,7 @@ namespace Catalog.API.Products.GetAllProducts;
 
 public sealed record GetAllProductQuery():IQuery<GetAllProductResult>;
 
-public sealed record GetAllProductResult(IImmutableList<Product> Products);
+public sealed record GetAllProductResult(IEnumerable<Product> Products);
 
 internal sealed class GetAllProductHandler(IDocumentSession session) : IQueryHandler<GetAllProductQuery, GetAllProductResult>
 {
@@ -18,9 +18,6 @@ internal sealed class GetAllProductHandler(IDocumentSession session) : IQueryHan
             .Query<Product>()
             .ToImmutableList();
 
-        var response = getAllProduct
-            .Adapt<GetAllProductResult>();
-
-        return response;
+        return new GetAllProductResult(getAllProduct);
     }
 }

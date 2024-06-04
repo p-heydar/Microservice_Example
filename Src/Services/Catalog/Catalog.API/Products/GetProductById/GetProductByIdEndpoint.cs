@@ -3,9 +3,9 @@ using Catalog.API.Models.Catalogs;
 
 namespace Catalog.API.Products.GetProductById;
 
-public sealed record GetProductByIdResponse(Product product);
+public  record GetProductByIdResponse(Product Product);
 
-internal sealed class GetProductByIdEndpoint : ICarterModule
+public sealed class GetProductByIdEndpoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {

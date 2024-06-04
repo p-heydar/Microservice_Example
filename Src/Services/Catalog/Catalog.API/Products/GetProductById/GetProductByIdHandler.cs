@@ -9,7 +9,7 @@ namespace Catalog.API.Products.GetProductById;
 
 public sealed record GetProductByIdQuery(Guid Id) : IQuery<GetProductByIdResult>;
 
-public sealed record GetProductByIdResult(Product product);
+public  record GetProductByIdResult(Product Product);
 
 internal sealed class GetProductByIdHandler(IDocumentSession session) :
     IQueryHandler<GetProductByIdQuery,
@@ -22,8 +22,7 @@ internal sealed class GetProductByIdHandler(IDocumentSession session) :
             .FirstOrDefaultAsync(x => x.Id == query.Id, cancellationToken)
                 ?? throw new ProductNotFoundException();
 
-        var result = findProductById.Adapt<GetProductByIdResult>();
 
-        return result;
+        return new GetProductByIdResult(findProductById);
     }
 }
