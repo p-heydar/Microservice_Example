@@ -10,9 +10,10 @@ public sealed class GetAllProductEndpoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapGet("/Products", async (ISender sender) =>
+        app.MapGet("/Products", async (int pageNumber , 
+                int pageSize, ISender sender) =>
         {
-            var result = await sender.Send(new GetAllProductQuery());
+            var result = await sender.Send(new GetAllProductQuery(pageNumber, pageSize));
             var response = result.Adapt<GetAllProductsResponse>();
             return Results.Ok(response);
         })
