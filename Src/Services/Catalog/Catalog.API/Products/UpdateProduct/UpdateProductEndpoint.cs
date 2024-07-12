@@ -1,6 +1,6 @@
 ﻿using Catalog.API.Models.Catalogs;
 using Catalog.API.Products.GetProductsByCategory;
-
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Catalog.API.Products.UpdateProduct;
@@ -8,6 +8,17 @@ namespace Catalog.API.Products.UpdateProduct;
 public sealed record UpdateProductRequest(Product Product);
 
 public sealed record UpdateProductResponse(bool IsSuccess);
+
+public sealed class UpdateProductCommandValidator : AbstractValidator<UpdateProductCommand>
+{
+    public UpdateProductCommandValidator()
+    {
+        RuleFor(x => x.Product.Id).NotEmpty().WithMessage("Please Send Valid Id");
+        RuleFor(x => x.Product.Categories).NotNull().WithMessage("Please Send Categories");
+        RuleFor(x => x.Product.Name).NotEmpty().WithMessage("Please Send Valid Name");
+        RuleFor(x => x.Product.Price).GreaterThan(0).WithMessage("Please Send Valid Price");
+    }
+}
 
 public sealed class UpdateProductEndpoint : ICarterModule
 {

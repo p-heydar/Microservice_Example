@@ -18,14 +18,13 @@ internal class UpdateProductHandler(IDocumentSession session) : ICommandHandler<
 {
     public async Task<UpdateProductResult> Handle(UpdateProductCommand command, CancellationToken cancellationToken)
     {
-        try
-        {
+       
             if ((command.Product.Id.Equals(Guid.Empty)))
                 throw new EmptyGuidException();
 
             var findProductById = await session.Query<Product>()
                 .FirstOrDefaultAsync(product => product.Id == command.Product.Id)
-                    ?? throw new ProductNotFoundException();
+                    ?? throw new ProductNotFoundException(command.Product.Id);
 
             findProductById.Name = command.Product.Name!;
             findProductById.Description = command.Product.Description!;
@@ -37,16 +36,8 @@ internal class UpdateProductHandler(IDocumentSession session) : ICommandHandler<
             await session.SaveChangesAsync();
 
             return new UpdateProductResult(true);
-        }
 
-        catch (Exception ex)
-        {
-            return new UpdateProductResult(false);
-        }
 
-        finally
-        {
-            await session.DisposeAsync();
-        }
+       
     }
 }

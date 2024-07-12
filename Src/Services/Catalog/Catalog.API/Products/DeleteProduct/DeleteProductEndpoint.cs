@@ -1,10 +1,19 @@
 ﻿
+using FluentValidation;
 using Marten;
 
 namespace Catalog.API.Products.DeleteProduct;
 
 
 public sealed record DeleteProductResponse(bool IsSuccess);
+
+public sealed class DeleteProductCommandValidator : AbstractValidator<DeleteProductCommand>
+{
+    public DeleteProductCommandValidator()
+    {
+        RuleFor(x => x.Id).NotEmpty().WithMessage("ProductId Is Requierd");
+    }
+}
 
 public sealed class DeleteProductEndpoint : ICarterModule
 {

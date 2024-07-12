@@ -23,8 +23,7 @@ internal sealed class GetProductsByCategoryHandler(IDocumentSession session) : I
         var findProductsByCategory = session.Query<Product>()
         .Where(product => product.Categories
             .Contains(query.Category))
-                .ToImmutableList()
-                    ?? throw new ProductNotFoundException();
+                .ToImmutableList();
 
         var result = new GetProductsByCategoryResult(findProductsByCategory);
 

@@ -21,7 +21,7 @@ public class DeleteProductHandler(IDocumentSession session) : ICommandHandler<De
         {
             var findProductById = await session.Query<Product>()
             .FirstOrDefaultAsync(x => x.Id == command.Id)
-                ?? throw new ProductNotFoundException();
+                ?? throw new ProductNotFoundException(command.Id);
 
             session.Delete(findProductById);
             await session.SaveChangesAsync(cancellationToken);

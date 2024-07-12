@@ -19,8 +19,7 @@ internal sealed class GetProductByIdHandler(IDocumentSession session) :
         CancellationToken cancellationToken)
     {
         var findProductById = await session.Query<Product>()
-            .FirstOrDefaultAsync(x => x.Id == query.Id, cancellationToken)
-                ?? throw new ProductNotFoundException();
+            .FirstOrDefaultAsync(x => x.Id == query.Id, cancellationToken);
 
 
         return new GetProductByIdResult(findProductById);

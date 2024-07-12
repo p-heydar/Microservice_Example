@@ -4,6 +4,11 @@ using FluentValidation;
 
 using Marten;
 
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
+
+using System.Reflection;
+
 var builder = WebApplication.CreateBuilder(args);
 
 
@@ -41,10 +46,37 @@ builder.Services
 var app = builder.Build();
 app.MapCarter();
 
+if (app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler(exceptionHandlerApp =>
+    {
+        exceptionHandlerApp.Run(async context =>
+        {
+            var exception = context.Features.Get<IExceptionHandlerFeature>()?.Error;
 
+            if (exception is null)
+            {
+                return;
+            }
+
+            ProblemDetails problemDetails = new ProblemDetails
+            {
+                Title = exception.Message,
+                Detail = exception.StackTrace,
+                Status = StatusCodes.Status500InternalServerError,
+            };
+
+            context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+            context.Response.ContentType = "application/problem+json";
+
+            await context.Response.WriteAsJsonAsync(problemDetails);
+        });
+    });
+
+}
 
 app.UseSwagger();
-app.UseSwaggerUI(c=>c.SwaggerEndpoint(
+app.UseSwaggerUI(c => c.SwaggerEndpoint(
     "/swagger/v1/swagger.json",
     "V1"));
 
