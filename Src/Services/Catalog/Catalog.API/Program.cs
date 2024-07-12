@@ -46,6 +46,9 @@ builder.Services.InitializeMartenWith<CatalogInitialData>();
 builder.Services
     .AddCarter();
 
+builder.Services.AddHealthChecks()
+    .AddNpgSql(builder.Configuration.GetConnectionString("DataBase")!);
+
 var app = builder.Build();
 app.MapCarter();
 
@@ -85,5 +88,6 @@ app.UseSwaggerUI(c => c.SwaggerEndpoint(
     "/swagger/v1/swagger.json",
     "V1"));
 
+app.MapHealthChecks("/health");
 
 app.Run();

@@ -6,7 +6,7 @@ using Marten.Pagination;
 
 namespace Catalog.API.Products.GetAllProducts;
 
-public sealed record GetAllProductQuery(short pageNumber, int pageSize):IQuery<GetAllProductResult>;
+public sealed record GetAllProductQuery(int pageNumber, int pageSize):IQuery<GetAllProductResult>;
 
 public sealed record GetAllProductResult(IEnumerable<Product> Products);
 

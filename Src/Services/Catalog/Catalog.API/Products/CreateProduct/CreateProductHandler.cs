@@ -21,11 +21,11 @@ public sealed class CreateProductCommandValidator : AbstractValidator<CreateProd
 
         RuleFor(x => x.Categories)
             .NotEmpty()
-            .WithMessage("Category Is Requierd");
+            .WithMessage("Category Is Required");
 
         RuleFor(x => x.ImageFile)
             .NotEmpty()
-            .WithMessage("Image Is Requierd");
+            .WithMessage("Image Is Required");
 
         RuleFor(x => x.Price)
             .GreaterThan(0)
@@ -35,7 +35,7 @@ public sealed class CreateProductCommandValidator : AbstractValidator<CreateProd
 
 public sealed record CreateProductResult(Guid Id);
 
-internal sealed class CreateProductCommandHandler(IDocumentSession session, IValidator<CreateProductCommand> validator)
+internal sealed class CreateProductCommandHandler(IDocumentSession session)
     : ICommandHandler<CreateProductCommand,
     CreateProductResult>
 {
@@ -53,7 +53,7 @@ internal sealed class CreateProductCommandHandler(IDocumentSession session, IVal
         };
 
         session.Store(newProduct);
-        await session.SaveChangesAsync();
+        await session.SaveChangesAsync(cancellationToken);
 
         return new CreateProductResult(newProduct.Id);
     }
