@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 
 using System.Reflection;
+using Catalog.API.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,6 +40,8 @@ builder.Services
 builder.Services
     .AddValidatorsFromAssembly(typeof(Program).Assembly);
 
+builder.Services.InitializeMartenWith<CatalogInitialData>();
+
 
 builder.Services
     .AddCarter();
@@ -48,6 +51,7 @@ app.MapCarter();
 
 if (app.Environment.IsDevelopment())
 {
+
     app.UseExceptionHandler(exceptionHandlerApp =>
     {
         exceptionHandlerApp.Run(async context =>
@@ -72,6 +76,7 @@ if (app.Environment.IsDevelopment())
             await context.Response.WriteAsJsonAsync(problemDetails);
         });
     });
+
 
 }
 

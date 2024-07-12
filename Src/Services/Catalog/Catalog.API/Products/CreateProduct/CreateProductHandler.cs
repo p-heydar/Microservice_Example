@@ -42,22 +42,6 @@ internal sealed class CreateProductCommandHandler(IDocumentSession session, IVal
     public async Task<CreateProductResult> Handle(CreateProductCommand command,
         CancellationToken cancellationToken)
     {
-        //var validation = await validator
-        //    .ValidateAsync(command, cancellationToken);
-
-        //var errors = validation.Errors
-        //    .Select(x => x.ErrorMessage)
-        //    .ToList();
-        //if (errors.Any())
-        //{
-        //    string errorsText = default;
-        //    foreach (var item in errors)
-        //    {
-        //        errorsText += item + Environment.NewLine;
-        //    }
-        //    throw new ValidationException(errorsText);
-        //}
-
         Product newProduct = new Product()
         {
             Id = Guid.NewGuid(),
