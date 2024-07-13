@@ -20,7 +20,6 @@ builder.Services
     configuration.AddOpenBehavior(typeof(ValidationBehaviors<,>));
 });
 
-
 builder.Services
     .AddEndpointsApiExplorer();
 
@@ -31,6 +30,9 @@ builder.Services
         new() { Title = "Eshop Contact Api", Version = "1" });
 });
 
+
+
+
 builder.Services
     .AddMarten(configuration =>
 {
@@ -40,12 +42,10 @@ builder.Services
 builder.Services
     .AddValidatorsFromAssembly(typeof(Program).Assembly);
 
-builder.Services.InitializeMartenWith<CatalogInitialData>();
-
+ builder.Services.InitializeMartenWith<CatalogInitialData>();
 
 builder.Services
     .AddCarter();
-
 builder.Services.AddHealthChecks()
     .AddNpgSql(builder.Configuration.GetConnectionString("DataBase")!);
 
