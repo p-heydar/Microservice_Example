@@ -1,35 +1,90 @@
+using BuildingBlocks.Behaviors;
+using FluentValidation;
+using Marten;
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
+using System.Reflection;
+using Carter;
 
-namespace Basket.API;
 
-public class Program
+var builder = WebApplication.CreateBuilder(args);
+
+
+builder.Services
+    .AddMediatR(configuration =>
 {
-    public static void Main(string[] args)
+    configuration.RegisterServicesFromAssemblies(typeof(Program).Assembly);
+    configuration.AddOpenBehavior(typeof(ValidationBehaviors<,>));
+});
+
+builder.Services
+    .AddEndpointsApiExplorer();
+
+builder.Services
+    .AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1",
+        new() { Title = "Eshop Contact Api", Version = "1" });
+});
+
+
+
+
+builder.Services
+    .AddMarten(configuration =>
+{
+    configuration.Connection(builder.Configuration.GetConnectionString("DataBase")!);
+}).UseLightweightSessions();
+
+builder.Services
+    .AddValidatorsFromAssembly(typeof(Program).Assembly);
+
+
+builder.Services
+    .AddCarter();
+
+builder.Services.AddHealthChecks()
+    .AddNpgSql(builder.Configuration.GetConnectionString("DataBase")!);
+
+var app = builder.Build();
+app.MapCarter();
+
+if (app.Environment.IsDevelopment())
+{
+
+    app.UseExceptionHandler(exceptionHandlerApp =>
     {
-        var builder = WebApplication.CreateBuilder(args);
-
-        // Add services to the container.
-
-        builder.Services.AddControllers();
-        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-        builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
-
-        var app = builder.Build();
-
-        // Configure the HTTP request pipeline.
-        if (app.Environment.IsDevelopment())
+        exceptionHandlerApp.Run(async context =>
         {
-            app.UseSwagger();
-            app.UseSwaggerUI();
-        }
+            var exception = context.Features.Get<IExceptionHandlerFeature>()?.Error;
 
-        app.UseHttpsRedirection();
+            if (exception is null)
+            {
+                return;
+            }
 
-        app.UseAuthorization();
+            ProblemDetails problemDetails = new ProblemDetails
+            {
+                Title = exception.Message,
+                Detail = exception.StackTrace,
+                Status = StatusCodes.Status500InternalServerError,
+            };
+
+            context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+            context.Response.ContentType = "application/problem+json";
+
+            await context.Response.WriteAsJsonAsync(problemDetails);
+        });
+    });
 
 
-        app.MapControllers();
-
-        app.Run();
-    }
 }
+
+app.UseSwagger();
+app.UseSwaggerUI(c => c.SwaggerEndpoint(
+    "/swagger/v1/swagger.json",
+    "V1"));
+ 
+app.MapHealthChecks("/health");
+
+app.Run();
