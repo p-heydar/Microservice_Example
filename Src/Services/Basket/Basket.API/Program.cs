@@ -4,19 +4,26 @@ using Marten;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection;
+using Basket.API.Data;
 using Carter;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
+#region Config Internal Service
+builder.Services.AddScoped<IBasketRepository, BasketRepository>();
+#endregion
 
+#region Config MediatR
 builder.Services
     .AddMediatR(configuration =>
 {
     configuration.RegisterServicesFromAssemblies(typeof(Program).Assembly);
     configuration.AddOpenBehavior(typeof(ValidationBehaviors<,>));
 });
+#endregion
 
+#region API Configuration
 builder.Services
     .AddEndpointsApiExplorer();
 
@@ -26,10 +33,11 @@ builder.Services
     c.SwaggerDoc("v1",
         new() { Title = "Eshop Contact Api", Version = "1" });
 });
+#endregion
 
 
 
-
+#region Db Configration
 builder.Services
     .AddMarten(configuration =>
 {
@@ -37,19 +45,27 @@ builder.Services
     configuration.Schema.For<ShoppingCart>().Identity(x => x.UserName);
 }).UseLightweightSessions();
 
-builder.Services
-    .AddValidatorsFromAssembly(typeof(Program).Assembly);
 
-
-builder.Services
-    .AddCarter();
-
+// Health Check
 builder.Services.AddHealthChecks()
     .AddNpgSql(builder.Configuration.GetConnectionString("DataBase")!);
+#endregion
+
+#region Behaviors Configration
+builder.Services
+    .AddValidatorsFromAssembly(typeof(Program).Assembly);
+#endregion
+
+#region Carter
+builder.Services
+    .AddCarter();
+#endregion
 
 var app = builder.Build();
+
 app.MapCarter();
 
+#region Exception Handling
 if (app.Environment.IsDevelopment())
 {
 
@@ -80,12 +96,16 @@ if (app.Environment.IsDevelopment())
 
 
 }
+#endregion
 
+#region Swagger Configuration
 app.UseSwagger();
 app.UseSwaggerUI(c => c.SwaggerEndpoint(
     "/swagger/v1/swagger.json",
     "V1"));
- 
+#endregion
+
+
 app.MapHealthChecks("/health");
 
 app.Run();

@@ -12,14 +12,16 @@ using Catalog.API.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
+#region MediatR
 builder.Services
     .AddMediatR(configuration =>
 {
     configuration.RegisterServicesFromAssemblies(typeof(Program).Assembly);
     configuration.AddOpenBehavior(typeof(ValidationBehaviors<,>));
 });
+#endregion
 
+#region Api Configration
 builder.Services
     .AddEndpointsApiExplorer();
 
@@ -29,29 +31,44 @@ builder.Services
     c.SwaggerDoc("v1",
         new() { Title = "Eshop Contact Api", Version = "1" });
 });
+#endregion
 
 
 
+#region DataBase Configuration
 
+// Config Postgres From Configration file
 builder.Services
     .AddMarten(configuration =>
 {
     configuration.Connection(builder.Configuration.GetConnectionString("DataBase")!);
 }).UseLightweightSessions();
 
-builder.Services
-    .AddValidatorsFromAssembly(typeof(Program).Assembly);
+// Init Db
+builder.Services.InitializeMartenWith<CatalogInitialData>();
 
- builder.Services.InitializeMartenWith<CatalogInitialData>();
-
-builder.Services
-    .AddCarter();
+// Health Check
 builder.Services.AddHealthChecks()
     .AddNpgSql(builder.Configuration.GetConnectionString("DataBase")!);
 
+#endregion
+
+
+#region Validator Behavior Configration
+builder.Services
+    .AddValidatorsFromAssembly(typeof(Program).Assembly);
+#endregion
+
+#region Carter Configration
+builder.Services
+    .AddCarter();
+#endregion
+
 var app = builder.Build();
+
 app.MapCarter();
 
+#region Exception Handling
 if (app.Environment.IsDevelopment())
 {
 
@@ -79,15 +96,18 @@ if (app.Environment.IsDevelopment())
             await context.Response.WriteAsJsonAsync(problemDetails);
         });
     });
-
-
 }
+#endregion
 
+#region Swagger Configration
 app.UseSwagger();
 app.UseSwaggerUI(c => c.SwaggerEndpoint(
     "/swagger/v1/swagger.json",
     "V1"));
- 
+#endregion
+
+#region HealthCeck For Api
 app.MapHealthChecks("/health");
+#endregion
 
 app.Run();
