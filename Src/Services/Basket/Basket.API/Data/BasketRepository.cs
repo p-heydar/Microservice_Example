@@ -7,7 +7,7 @@ public class BasketRepository(IDocumentSession session):IBasketRepository
 {
     public async Task<ShoppingCart> GetBasketAsync(string userName, CancellationToken cancellationToken)
     {
-        var findBasket = await session.LoadAsync<ShoppingCart>(userName, cancellationToken)??throw new BasketNotFound(userName);
+        var findBasket = await session.LoadAsync<ShoppingCart>(userName, cancellationToken)??throw new BasketNotFoundException(userName);
         return findBasket;
     }
 
