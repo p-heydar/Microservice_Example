@@ -1,8 +1,8 @@
-﻿namespace Catalog.API.Exceptions;
+﻿namespace BuildingBlocks.Exceptions;
 
 public class NotFoundException:Exception
 {
-    public NotFoundException(string entityName, Guid id) : base($"{entityName} By Id {id} Was Not Found")
+    public NotFoundException(string entityName, object key) : base($"{entityName} By Id {key} Was Not Found")
     {
     }
 }
