@@ -1,7 +1,7 @@
 services:
+  #Db Config
   catalogdb:
     container_name: catalogdb
-    image: postgres:latest
     environment:
       - POSTGRES_USER=citizix_user
       - POSTGRES_PASSWORD=S3cret
@@ -9,8 +9,23 @@ services:
     restart: always
     ports:
       - "5432:5432"
+    volumes:
+      - postgres_catalog:/var/lib/postgresql/data
 
+  basketdb:
+    container_name: basketdb
+    environment:
+      - POSTGRES_USER=citizix_user
+      - POSTGRES_PASSWORD=S3cret
+      - POSTGRES_DB=basketDb
+    restart: always
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_basket:/var/lib/postgresql/data
+    #end DbConfig
 
+  #API Configuration
   catalog.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
@@ -26,3 +41,20 @@ services:
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+
+#  basket.api:
+#    environment:
+#      - ASPNETCORE_ENVIRONMENT=Development
+#      - ASPNETCORE_HTTP_PORTS=8080
+#      - ASPNETCORE_HTTPS_PORTS=8081
+#      - ConnectionStrings__Database=Server=basketdb;port=5433;Database=BasketDb;User Id=citizix_user; Password=S3cret; Include Error Detail=true
+#    depends_on:
+#      - catalogdb
+#    ports:
+#      - "6000:8080"
+#      - "6060:8081"
+#    image: ${DOCKER_REGISTRY-}catalogapi
+#    volumes:
+#      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+#      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+  # End Api Configuration

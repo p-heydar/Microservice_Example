@@ -1,7 +1,6 @@
 # This is a generated file. Not intended for manual editing.
-version: "3.4"
 services:
-  api:
+  catalog.api:
     build:
       context: "C:\\Users\\Pedram\\source\\repos\\EShop_MicroService"
       dockerfile: "Src/Services/Catalog/Catalog.API/Dockerfile"
@@ -12,10 +11,9 @@ services:
     - "/app/bin/Debug/net8.0/Catalog.API.dll"
     environment:
       DOTNET_USE_POLLING_FILE_WATCHER: "true"
-    image: "api:dev"
+    image: "catalogapi:dev"
     ports: []
     volumes:
-    - "C:\\Users\\Pedram\\AppData\\Roaming\\Microsoft\\UserSecrets:/home/app/.microsoft/usersecrets"
     - "C:\\Users\\Pedram\\.nuget\\packages:/home/app/.nuget/packages"
     - "C:\\Users\\Pedram\\source\\repos\\EShop_MicroService\\Src\\Services\\Catalog\\\
       Catalog.API:/app:rw"
