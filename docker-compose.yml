@@ -13,17 +13,17 @@ services:
   messagebroker:
     image: rabbitmq:management
 
-#  catalog.api:
-#    image: ${DOCKER_REGISTRY-}catalogapi
-#    build:
-#      context: .
-#      dockerfile: /Src/Services/Catalog/Catalog.API/Dockerfile
-#
-#  basket.api:
-#    image: ${DOCKER_REGISTRY-}basketapi
-#    build:
-#      context: .
-#      dockerfile: /Src/Services/Basket/Basket.API/Dockerfile
+  catalog.api:
+    image: ${DOCKER_REGISTRY-}catalogapi
+    build:
+      context: .
+      dockerfile: /Src/Services/Catalog/Catalog.API/Dockerfile
+
+  basket.api:
+    image: ${DOCKER_REGISTRY-}basketapi
+    build:
+      context: .
+      dockerfile: /Src/Services/Basket/Basket.API/Dockerfile
 
 volumes:
   postgres_catalog:

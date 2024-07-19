@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using System.Reflection;
 using Basket.API.Data;
 using Carter;
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -39,6 +41,7 @@ builder.Services
 
 
 #region Db Configration
+var redisConnectionString = builder.Configuration.GetConnectionString("Redis");
 
 #region Postgres
 builder.Services
@@ -51,12 +54,12 @@ builder.Services
 
 // Health Check
 builder.Services.AddHealthChecks()
-    .AddNpgSql(builder.Configuration.GetConnectionString("DataBase")!);
+    .AddNpgSql(builder.Configuration.GetConnectionString("DataBase")!)
+    .AddRedis(redisConnectionString!);
 #endregion
 
 #region Redis
 
-var redisConnectionString = builder.Configuration.GetConnectionString("Redis");
 
 builder.Services.AddStackExchangeRedisCache(configuration =>
     configuration.Configuration = redisConnectionString);
@@ -119,6 +122,9 @@ app.UseSwaggerUI(c => c.SwaggerEndpoint(
 #endregion
 
 
-app.MapHealthChecks("/health");
+app.MapHealthChecks("/health", new HealthCheckOptions
+{
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
 
 app.Run();

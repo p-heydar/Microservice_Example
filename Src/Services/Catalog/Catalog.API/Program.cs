@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 
 using System.Reflection;
 using Catalog.API.Data;
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -107,7 +109,10 @@ app.UseSwaggerUI(c => c.SwaggerEndpoint(
 #endregion
 
 #region HealthCeck For Api
-app.MapHealthChecks("/health");
+app.MapHealthChecks("/health", new HealthCheckOptions
+{
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
 #endregion
 
 app.Run();
