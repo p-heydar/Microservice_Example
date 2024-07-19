@@ -12,6 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 #region Config Internal Service
 builder.Services.AddScoped<IBasketRepository, BasketRepository>();
+builder.Services.Decorate<IBasketRepository, CacheBasketRepository>();
 #endregion
 
 #region Config MediatR
@@ -55,10 +56,10 @@ builder.Services.AddHealthChecks()
 
 #region Redis
 
-var redisConnectionString = builder.Configuration.GetConnectionString("Redis"));
+var redisConnectionString = builder.Configuration.GetConnectionString("Redis");
 
 builder.Services.AddStackExchangeRedisCache(configuration =>
-    configuration.Configuration(redisConnectionString));
+    configuration.Configuration = redisConnectionString);
 
 #endregion
 #endregion

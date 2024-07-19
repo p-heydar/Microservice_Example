@@ -6,7 +6,7 @@ namespace Basket.API.Basket.StoreBasket;
 
 public sealed record StoreBasketRequest(ShoppingCart Cart);
 
-public sealed record StoreBasketResponse(bool Issuccess);
+public sealed record StoreBasketResponse(ShoppingCart cart);
 
 public class StoreBasketEndpoint:ICarterModule
 {
@@ -20,7 +20,7 @@ public class StoreBasketEndpoint:ICarterModule
 
             var response = result.Adapt<StoreBasketResponse>();
 
-            return Results.Created($"/basket{response.Issuccess}", response);
+            return Results.Created($"/basket{response.cart.UserName}", response);
         })
         .WithName("Store Basket")
         .Produces<StoreBasketResponse>(StatusCodes.Status201Created)

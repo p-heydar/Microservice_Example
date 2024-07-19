@@ -4,7 +4,7 @@ using Microsoft.Extensions.Caching.Distributed;
 namespace Basket.API.Data;
 
 public class CacheBasketRepository(IBasketRepository basketRepository, IDistributedCache cache)
-    :ICacheBasketRepository
+    :IBasketRepository
 {
     public async Task<ShoppingCart> GetBasketAsync(string userName, CancellationToken cancellationToken)
     {
