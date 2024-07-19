@@ -38,6 +38,8 @@ builder.Services
 
 
 #region Db Configration
+
+#region Postgres
 builder.Services
     .AddMarten(configuration =>
 {
@@ -49,6 +51,16 @@ builder.Services
 // Health Check
 builder.Services.AddHealthChecks()
     .AddNpgSql(builder.Configuration.GetConnectionString("DataBase")!);
+#endregion
+
+#region Redis
+
+var redisConnectionString = builder.Configuration.GetConnectionString("Redis"));
+
+builder.Services.AddStackExchangeRedisCache(configuration =>
+    configuration.Configuration(redisConnectionString));
+
+#endregion
 #endregion
 
 #region Behaviors Configration
