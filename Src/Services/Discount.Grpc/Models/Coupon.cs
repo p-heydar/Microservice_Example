@@ -1,4 +1,4 @@
-﻿namespace Discount.Grpc.Properties.Models;
+﻿namespace Discount.Grpc.Models;
 
 public class Coupon
 {
