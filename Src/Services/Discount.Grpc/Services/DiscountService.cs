@@ -72,7 +72,7 @@ public class DiscountService(DiscountContext dbContext, ILogger<DiscountService>
         dbContext.Remove(findCouponByProductName);
         await dbContext.SaveChangesAsync();
 
-        logger.LogInformation($"Coupon For {request.ProductName} Deleted")
+        logger.LogInformation($"Coupon For {request.ProductName} Deleted");
 
         return new DeleteDiscountResponse { Success = true };
     }
