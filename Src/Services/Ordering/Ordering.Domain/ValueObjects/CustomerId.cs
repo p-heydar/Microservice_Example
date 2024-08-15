@@ -3,8 +3,8 @@ namespace Ordering.Domain.ValueObjects;
 
 public record CustomerId
 {
-    public Guid value { get; }
-    private CustomerId(Guid value) => this.value = value;
+    public Guid Value { get; }
+    private CustomerId(Guid value) => this.Value = value;
 
     public static CustomerId Of(Guid newValue)
     {
