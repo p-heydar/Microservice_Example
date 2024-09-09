@@ -3,14 +3,24 @@ using Ordering.Domain.ValueObjects;
 
 namespace Ordering.Domain.Models;
 
-public sealed class OrderItem:Entity<Guid>
+public sealed class OrderItem:Entity<OrderItemId>
 {
-    public OrderItem(OrderId orderId, ProductId productId, int quantity, decimal price)
+    private OrderItem()
     {
+        
+    }
+    private OrderItem(OrderItemId orderItemId, OrderId orderId, ProductId productId, int quantity, decimal price)
+    {
+        Id = orderItemId;
         OrderId = orderId;
         ProductId = productId;
         Quantity = quantity;
         Price = price;
+    }
+
+    public static OrderItem Create(OrderItemId orderItemId, OrderId orderId, ProductId productId, int quantity, decimal price)
+    {
+        return new OrderItem(orderItemId, orderId, productId, quantity, price);
     }
 
     public OrderId OrderId { get; private set; }
