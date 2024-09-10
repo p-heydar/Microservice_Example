@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection;
 using Basket.API.Data;
+using BuildingBlocks.Messaging.MassTransit;
 using Carter;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -39,7 +40,10 @@ builder.Services
 });
 #endregion
 
+#region MessageBroker
 
+builder.Services.AddMessageBroker(builder.Configuration, assembly: Assembly.GetExecutingAssembly());
+#endregion
 
 #region Db Configration
 var redisConnectionString = builder.Configuration.GetConnectionString("Redis");

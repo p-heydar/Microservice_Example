@@ -1,6 +1,8 @@
 using Ordering.API;
 using Ordering.Application;
+using Ordering.Application.Data;
 using Ordering.Infrastructure;
+using Ordering.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,11 +11,15 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var app = builder.Build();
 
-builder.Services.AddApplicationService()
+builder.Services.AddApplicationService(builder.Configuration)
     .AddInfrastructureService(builder.Configuration)
     .AddApiServices(builder.Configuration);
+
+
+var app = builder.Build();
+
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
