@@ -10,6 +10,9 @@ services:
   distributedcache:
     image: redis
 
+  orderdb:
+    image: mcr.microsoft.com/mssql/server
+
   messagebroker:
     image: rabbitmq:management
 
@@ -17,22 +20,38 @@ services:
     image: ${DOCKER_REGISTRY-}catalogapi
     build:
       context: .
-      dockerfile: /Src/Services/Catalog/Catalog.API/Dockerfile
+      dockerfile: Src/Services/Catalog/Catalog.API/Dockerfile
 
   basket.api:
     image: ${DOCKER_REGISTRY-}basketapi
     build:
       context: .
-      dockerfile: /Src/Services/Basket/Basket.API/Dockerfile
-      
+      dockerfile: Src/Services/Basket/Basket.API/Dockerfile
+
   discount.grpc:
     image: ${DOCKER_REGISTRY-}discountgrpc
     build:
       context: .
-      dockerfile: Src/Services/Discount.Grpc/Dockerfile
+      dockerfile: Src/Services/Discount/Discount.Grpc/Dockerfile
+
+  ordering.api:
+    image: ${DOCKER_REGISTRY-}orderingapi
+    build:
+      context: .
+      dockerfile: Src/Services/Ordering/Ordering.API/Dockerfile
+
+  yarpapigateway:
+    image: ${DOCKER_REGISTRY-}yarpapigateway
+    build:
+      context: .
+      dockerfile: Src/ApiGateways/YarpApiGateway/Dockerfile
 
 volumes:
   postgres_catalog:
   postgres_basket:
+
+
+
+
 
 

@@ -13,7 +13,7 @@ var app = builder.Build();
 
 builder.Services.AddApplicationService()
     .AddInfrastructureService(builder.Configuration)
-    .AddApiServices();
+    .AddApiServices(builder.Configuration);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -23,7 +23,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.useApiServices();
 
 app.Run();
 

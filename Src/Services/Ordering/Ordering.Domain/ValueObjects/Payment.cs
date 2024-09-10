@@ -6,7 +6,7 @@ public sealed class Payment
     public string CardNumber { get; } = default!;
     public string Expiration { get; } = default!;
     public string CVV { get; } = default!;
-    public string PaymentMethod { get; } = default!;
+    public int PaymentMethod { get; } = default!;
 
     private Payment(CreatePaymentValueObjectDto createPaymentValueObjectDto)
     {
@@ -23,10 +23,9 @@ public sealed class Payment
         ArgumentException.ThrowIfNullOrEmpty(createPaymentValueObjectDto.cardNumber);
         ArgumentException.ThrowIfNullOrEmpty(createPaymentValueObjectDto.expiration);
         ArgumentException.ThrowIfNullOrEmpty(createPaymentValueObjectDto.cvv);
-        ArgumentException.ThrowIfNullOrEmpty(createPaymentValueObjectDto.paymentMethod);
 
         return new Payment(createPaymentValueObjectDto);
     }
 }
 
-public sealed record CreatePaymentValueObjectDto(string cardName, string cardNumber, string expiration, string cvv, string paymentMethod);
+public sealed record CreatePaymentValueObjectDto(string cardName, string cardNumber, string expiration, string cvv, int paymentMethod);
