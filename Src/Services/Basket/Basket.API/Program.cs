@@ -10,6 +10,7 @@ using Carter;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Discount.Grpc;
+using MassTransit;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -42,7 +43,8 @@ builder.Services
 
 #region MessageBroker
 
-builder.Services.AddMessageBroker(builder.Configuration, assembly: Assembly.GetExecutingAssembly());
+// builder.Services.AddMessageBroker(builder.Configuration, assembly: Assembly.GetExecutingAssembly());
+
 #endregion
 
 #region Db Configration
