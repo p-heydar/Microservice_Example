@@ -43,7 +43,7 @@ builder.Services
 
 #region MessageBroker
 
-// builder.Services.AddMessageBroker(builder.Configuration, assembly: Assembly.GetExecutingAssembly());
+builder.Services.AddMessageBroker(builder.Configuration, assembly: Assembly.GetExecutingAssembly());
 
 #endregion
 
