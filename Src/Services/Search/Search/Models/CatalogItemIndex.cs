@@ -2,7 +2,7 @@
 
 namespace Search.Models;
 
-public record CatalogIndexItem
+public record CatalogItemIndex
 {
     // Index Name
     public const string IndexName = "catalog-item-index";

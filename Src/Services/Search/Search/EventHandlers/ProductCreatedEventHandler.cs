@@ -13,7 +13,7 @@ public sealed class ProductCreatedEventHandler(ElasticsearchClient _elasticsearc
         if (message is null)
             return;
 
-        var newItemIndex = new CatalogIndexItem
+        var newItemIndex = new CatalogItemIndex
         {
             Name = message.Name,
             Categories = message.Categories,
@@ -25,13 +25,13 @@ public sealed class ProductCreatedEventHandler(ElasticsearchClient _elasticsearc
             OccurredOn = message.OccurredOn
         };
 
-        var result = await _elasticsearchClient.Indices.ExistsAsync(CatalogIndexItem.IndexName);
+        var result = await _elasticsearchClient.Indices.ExistsAsync(CatalogItemIndex.IndexName);
         
         if (!result.Exists)
-            await _elasticsearchClient.Indices.CreateAsync<CatalogIndexItem>(index: CatalogIndexItem.IndexName);
+            await _elasticsearchClient.Indices.CreateAsync<CatalogItemIndex>(index: CatalogItemIndex.IndexName);
 
         var addProductIndexItem =
-            await _elasticsearchClient.IndexAsync(index: CatalogIndexItem.IndexName, document: newItemIndex);
+            await _elasticsearchClient.IndexAsync(index: CatalogItemIndex.IndexName, document: newItemIndex);
 
         var results = addProductIndexItem.IsValidResponse;
        return;
