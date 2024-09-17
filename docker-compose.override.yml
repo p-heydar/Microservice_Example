@@ -73,8 +73,8 @@ services:
       - ConnectionStrings__Redis=distributedcache:6379
       - GrpcSettings__DiscountUrl=https://discount.grpc:8081
       - MessageBroker__Host=amqp://ecommerce-mq:5672
-      - MessageBroker__UserName=guest
-      - MessageBroker__Password=guest
+      - MessageBroker__UserName=guest2
+      - MessageBroker__Password=guest2
     depends_on:
       - basketdb
       - distributedcache
