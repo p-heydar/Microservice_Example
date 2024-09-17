@@ -1,9 +1,11 @@
 ﻿using BuildingBlocks.CQRS.Command;
+using BuildingBlocks.Messaging.Events;
 using Catalog.API.Models.Catalogs;
 
 using FluentValidation;
 
 using Marten;
+using MassTransit;
 
 namespace Catalog.API.Products.CreateProduct;
 
@@ -35,7 +37,7 @@ public sealed class CreateProductCommandValidator : AbstractValidator<CreateProd
 
 public sealed record CreateProductResult(Guid Id);
 
-internal sealed class CreateProductCommandHandler(IDocumentSession session)
+internal sealed class CreateProductCommandHandler(IDocumentSession session, IPublishEndpoint publishEndpoint)
     : ICommandHandler<CreateProductCommand,
     CreateProductResult>
 {
@@ -55,6 +57,15 @@ internal sealed class CreateProductCommandHandler(IDocumentSession session)
         session.Store(newProduct);
         await session.SaveChangesAsync(cancellationToken);
 
+        await publishEndpoint.Publish(new ProductCreated
+        {
+            Name = newProduct.Name,
+            Categories = newProduct.Categories,
+            Description = newProduct.Description,
+            ImageFile = newProduct.ImageFile,
+            Price = newProduct.Price
+        });
+        
         return new CreateProductResult(newProduct.Id);
     }
 }

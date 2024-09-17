@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 
 using System.Reflection;
+using BuildingBlocks.Messaging.MassTransit;
 using Catalog.API.Data;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -35,7 +36,11 @@ builder.Services
 });
 #endregion
 
+#region MessageBroker
 
+builder.Services.AddMessageBroker(builder.Configuration);
+
+#endregion
 
 #region DataBase Configuration
 
