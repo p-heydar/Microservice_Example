@@ -1,11 +1,42 @@
+using Elastic.Clients.Elasticsearch;
+using Elastic.Transport;
+using Microsoft.Extensions.Options;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.Configure<AppSetting>(builder.Configuration);
+
+builder.Services.AddScoped(service =>
+{
+    var appSetting = service.GetRequiredService<IOptions<AppSetting>>().Value.ElasticSearchConfiguration;
+    var settings = new ElasticsearchClientSettings(new Uri(appSetting.Host))
+        .CertificateFingerprint(appSetting.Fingerprint)
+        .Authentication(new BasicAuthentication(appSetting.UserName, appSetting.Password));
+    
+    var client = new ElasticsearchClient(settings);
+    // return client;
+    return client;
+});
+
+
+
+
 var app = builder.Build();
+
+app.MapPost("/", async (ElasticsearchClient client, string newValue) =>
+{
+    var test = new test(newValue);
+    var result = await client.IndexAsync(test, index: "my-index");
+
+    if (result.IsValidResponse)
+        return Results.Ok("True");
+    else
+        return Results.Ok("False");
+
+});
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -16,29 +47,22 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
 
-app.MapGet("/weatherforecast", () =>
-    {
-        var forecast = Enumerable.Range(1, 5).Select(index =>
-                new WeatherForecast
-                (
-                    DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                    Random.Shared.Next(-20, 55),
-                    summaries[Random.Shared.Next(summaries.Length)]
-                ))
-            .ToArray();
-        return forecast;
-    })
-    .WithName("GetWeatherForecast")
-    .WithOpenApi();
 
 app.Run();
 
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
+
+public sealed record test(string text);
+
+public sealed class AppSetting
 {
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+    public ElasticSearchConfiguration ElasticSearchConfiguration { get; set; }
+}
+
+public sealed class ElasticSearchConfiguration
+{
+    public string Host { get; set; }
+    public string UserName { get; set; }
+    public string Password { get; set; }
+    public string Fingerprint { get; set; }
 }
