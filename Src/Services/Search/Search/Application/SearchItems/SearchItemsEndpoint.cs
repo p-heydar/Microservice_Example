@@ -16,7 +16,7 @@ public sealed class SearchItemsEndpoint:ICarterModule
                     .From(0)
                     .Size(100)
                     .Query(query =>
-                        query.Term(term => term.Field(field => field.Name)
+                        query.Fuzzy(term => term.Field(field => field.Name)
                             .Value(Query))));
             if (response.IsValidResponse)
                 return Results.Ok(response.Documents);
