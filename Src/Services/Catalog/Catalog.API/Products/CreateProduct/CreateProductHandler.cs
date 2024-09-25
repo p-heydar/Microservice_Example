@@ -44,13 +44,13 @@ internal sealed class CreateProductCommandHandler(IDocumentSession session, IPub
     public async Task<CreateProductResult> Handle(CreateProductCommand command,
         CancellationToken cancellationToken)
     {
-        Product newProduct = new Product()
+        Product newProduct = new Product
         {
             Id = Guid.NewGuid(),
             Name = command.Name,
             Categories = command.Categories,
             Description = command.Description,
-            ImageFile = command.ImageFile,
+            ImageAddress = command.ImageFile,
             Price = command.Price
         };
 
@@ -62,7 +62,7 @@ internal sealed class CreateProductCommandHandler(IDocumentSession session, IPub
             Name = newProduct.Name,
             Categories = newProduct.Categories,
             Description = newProduct.Description,
-            ImageFile = newProduct.ImageFile,
+            ImageFile = newProduct.ImageAddress,
             Price = newProduct.Price
         });
         

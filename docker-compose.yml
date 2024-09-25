@@ -39,13 +39,15 @@ services:
     build:
       context: .
       dockerfile: Src/Services/Ordering/Ordering.API/Dockerfile
+  media:
+    image: media
+    build:
+      context: .
+      dockerfile: Src/Services/Media/Media/Dockerfile
+
       
 volumes:
   postgres_catalog:
   postgres_basket:
-
-
-
-
 
 

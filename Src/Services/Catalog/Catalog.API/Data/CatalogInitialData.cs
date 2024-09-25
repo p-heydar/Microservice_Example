@@ -27,7 +27,7 @@ public class CatalogInitialData:IInitialData
         {
             Id = new Guid(),
             Description = "Test Product",
-            ImageFile = "test",
+            ImageAddress = "Test",
             InsertDate = DateTime.Now,
             Categories = new List<string>()
             {

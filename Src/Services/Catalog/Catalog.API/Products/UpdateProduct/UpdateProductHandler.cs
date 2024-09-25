@@ -28,7 +28,7 @@ internal class UpdateProductHandler(IDocumentSession session) : ICommandHandler<
 
             findProductById.Name = command.Product.Name!;
             findProductById.Description = command.Product.Description!;
-            findProductById.ImageFile = command.Product.ImageFile!;
+            findProductById.ImageAddress = command.Product.ImageAddress!;
             findProductById.Price = command.Product.Price!;
             findProductById.Categories = command.Product.Categories!;
 
