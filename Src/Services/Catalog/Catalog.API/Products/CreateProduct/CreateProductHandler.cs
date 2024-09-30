@@ -1,4 +1,5 @@
-﻿using BuildingBlocks.CQRS.Command;
+﻿using System.Buffers.Text;
+using BuildingBlocks.CQRS.Command;
 using BuildingBlocks.Messaging.Events;
 using Catalog.API.Models.Catalogs;
 
@@ -10,7 +11,7 @@ using MassTransit;
 namespace Catalog.API.Products.CreateProduct;
 
 public record CreateProductCommand(string Name, List<string> Categories,
-        string Description, string ImageFile, decimal Price)
+        string Description, IFormFile ImageFile, decimal Price)
     : ICommand<CreateProductResult>;
 
 public sealed class CreateProductCommandValidator : AbstractValidator<CreateProductCommand>
@@ -50,21 +51,35 @@ internal sealed class CreateProductCommandHandler(IDocumentSession session, IPub
             Name = command.Name,
             Categories = command.Categories,
             Description = command.Description,
-            ImageAddress = command.ImageFile,
             Price = command.Price
         };
 
         session.Store(newProduct);
         await session.SaveChangesAsync(cancellationToken);
 
+
+        byte[] bytes;
+        using (var memoryStream = new MemoryStream())
+        {
+            await command.ImageFile.CopyToAsync(memoryStream);
+            bytes = memoryStream.ToArray();
+        }
+
+        var base64 = Convert.ToBase64String(bytes);
+        
         await publishEndpoint.Publish(new ProductCreated
         {
             Name = newProduct.Name,
             Categories = newProduct.Categories,
             Description = newProduct.Description,
-            ImageFile = newProduct.ImageAddress,
-            Price = newProduct.Price
+            Price = newProduct.Price,
+            file = new ProductImageData(file: base64,
+                fileName: command.ImageFile.FileName,
+                contentType: command.ImageFile.ContentType,
+                fileSize: command.ImageFile.Length)
         });
+        
+        
         
         return new CreateProductResult(newProduct.Id);
     }

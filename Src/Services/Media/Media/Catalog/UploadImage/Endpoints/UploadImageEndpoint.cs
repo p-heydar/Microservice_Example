@@ -2,7 +2,7 @@
 using Minio;
 using Minio.DataModel.Args;
 
-namespace Media.Application.Catalog.UploadImage;
+namespace Media.Catalog.UploadImage.Endpoints;
 
 public sealed class UploadImageEndpoint:ICarterModule
 {
@@ -24,19 +24,9 @@ public sealed class UploadImageEndpoint:ICarterModule
                    .WithObjectSize(file.Length)
                    .WithStreamData(file.OpenReadStream()));
 
-           var memoryStream = new MemoryStream();
+           string downloadPath = $"{bucketName}/{file.FileName}";
 
-           GetObjectArgs getObjectArgs = new GetObjectArgs()
-               .WithObject(file.FileName)
-               .WithBucket(bucketName)
-               .WithCallbackStream((stream) =>
-               {
-                    stream.CopyTo(memoryStream);
-               });
-           
-           return Results.File(memoryStream);
-           // PutObjectArgs args = new PutObjectArgs().WithBucket("Catalog")
-           // _minioClient.PutObjectAsync()
+           return Results.Ok(downloadPath);
         }).DisableAntiforgery();
     }
 }

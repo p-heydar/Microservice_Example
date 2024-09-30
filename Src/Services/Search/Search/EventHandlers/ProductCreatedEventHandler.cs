@@ -19,7 +19,6 @@ public sealed class ProductCreatedEventHandler(ElasticsearchClient _elasticsearc
             Categories = message.Categories,
             Description = message.Description,
             Price = message.Price,
-            ImageFile = message.ImageFile,
             Id = message.Id,
             EventType = message.EventType,
             OccurredOn = message.OccurredOn
