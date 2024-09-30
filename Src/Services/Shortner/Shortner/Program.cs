@@ -2,6 +2,7 @@ using System.Reflection;
 using Carter;
 using Microsoft.EntityFrameworkCore;
 using Shortner.Data;
+using Shortner.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -47,5 +48,12 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.MapCarter();
+
+app.MapGet("/test", async (AppDbContext _dbContext) =>
+{
+    var getAll = await _dbContext.Urls.ToListAsync();
+    return Results.Ok(getAll.Select(x => x.Id));
+
+});
 
 app.Run();
