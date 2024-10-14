@@ -5,6 +5,7 @@ using FluentValidation;
 using MediatR;
 
 using System.Net.Http.Headers;
+using System.Text;
 using System.Windows.Input;
 
 namespace BuildingBlocks.Behaviors;
@@ -30,7 +31,13 @@ public sealed class ValidationBehaviors<TRequest, TResponse>
 
         if (failures.Any())
         {
-            throw new ValidationException(failures);
+            var errorMessages = failures.Select(x => x.ErrorMessage);
+            string messages = "";
+            foreach (var item in errorMessages)
+            {
+                messages += item + Environment.NewLine;
+            }
+            throw new Exception(messages);
         }
 
         return await next();

@@ -1,5 +1,7 @@
 using System.Reflection;
+using BuildingBlocks.Behaviors;
 using Carter;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Shortner.Data;
 using Shortner.Models;
@@ -20,6 +22,8 @@ builder.Services.AddCarter();
 builder.Services.AddMediatR(configuration: configuration =>
 {
     configuration.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+    configuration.AddOpenBehavior(typeof(ValidationBehaviors<,>));
+
 });
 
 #endregion
@@ -35,6 +39,13 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 #endregion
 
 
+#region Validator
+
+builder.Services
+    .AddValidatorsFromAssembly(typeof(Program).Assembly);
+
+#endregion
+
 
 var app = builder.Build();
 
@@ -45,15 +56,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.MapGet("/", async (AppDbContext _dbContext) =>
+{
+    var res = await _dbContext.Urls.AsNoTracking().ToListAsync();
+    return Results.Ok(res);
+});
+
 app.UseHttpsRedirection();
 
 app.MapCarter();
 
-app.MapGet("/test", async (AppDbContext _dbContext) =>
-{
-    var getAll = await _dbContext.Urls.ToListAsync();
-    return Results.Ok(getAll.Select(x => x.Id));
-
-});
 
 app.Run();
