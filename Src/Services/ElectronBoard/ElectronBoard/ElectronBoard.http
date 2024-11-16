@@ -1,0 +1,6 @@
+@ElectronBoard_HostAddress = http://localhost:5260
+
+GET {{ElectronBoard_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
